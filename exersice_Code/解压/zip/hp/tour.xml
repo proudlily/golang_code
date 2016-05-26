@@ -1,0 +1,236 @@
+<krpano version="1.16" title="航拍" onstart="startup();">
+
+	<include url="skin/vtourskin.xml" />
+
+	<control movetocursor="arrow" />
+	
+    <autorotate enabled="true"
+            waittime="2.0" 
+            speed="0.5" 
+            horizon="0.0" 
+            tofov="120.0" 
+           />
+
+<style name="hotspot_ani_black"
+	       url="hotspots/hotspot_ani_black_64x64x20.png"
+	       crop="0|0|64|64"
+	       frames="20" framewidth="64" frameheight="64" frame="0"
+	       onloaded="hotspot_animate();"
+	       altonloaded="if(isphone, mul(scale,2)); onloaded();"
+	       />
+
+	<style name="hotspot_ani_white"
+	       url="hotspots/hotspot_ani_white_64x64x20.png"
+	       crop="0|0|64|64"
+	       frames="20" framewidth="64" frameheight="64" frame="0"
+	       onloaded="hotspot_animate();"
+	       altonloaded="if(isphone, mul(scale,2)); onloaded();"
+	       />	       
+
+	<action name="hotspot_animate">
+		inc(frame,1,get(frames),0);
+		mul(ypos,frame,frameheight);
+		txtadd(crop,'0|',get(ypos),'|',get(framewidth),'|',get(frameheight));
+		delayedcall(0.03, hotspot_animate() );
+	</action>	
+	<textstyle name="STYLE2"
+			   font="Arial"
+			   fontsize="18"
+			   bold="true"
+			   background="false"
+			   border="false"
+			   textcolor="0xFFFFFF"
+			   effect="glow(0x000000);"
+			   textalign="center"
+			   />	
+	  
+
+	<panoview h="140" v="30" fov="120"/>
+	
+	<!-- set skin settings: bingmaps? gyro? thumbnail controlling? tooltips? -->
+	<skin_settings bingmaps="false"
+	               bingmaps_key=""
+	               bingmaps_zoombuttons="false"
+	               gyro="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               controlbar_offset="20"
+	               />
+
+	<!-- set optional skin logo url -->
+	<layer name="skin_logo" url="" scale="0.25" opened_onclick="openurl('...',_blank);" />
+
+
+	<action name="startup">
+		
+		if(startscene === null, copy(startscene,scene[0].name));
+		loadscene(get(startscene), null, MERGE);
+		
+		onhover="set(autorotate.enabled, false);"
+        onhout="set(autorotate.enabled, true);",
+		
+		
+	</action>
+    <plugin
+        name="panoControl"
+        url="plugins/gPanoControl.swf"
+        autopos="topleft, 10, 30"
+        keep="true"
+        alpha=".5"
+        zorder="1"
+        hovercolor="0x526CC2"
+        hovercolorstrength="0.4"
+        onover="tween(plugin[panoControl].alpha,1.0,0.05);"
+	onout="tween(plugin[panoControl].alpha,.5,0.1);"
+        heading="-70"
+     />
+		<action name="show_info_text">
+			set(plugin[info_text].alpha,0);
+			set(plugin[info_text].textblur,15);
+			set(plugin[info_text].blur,15); 
+			set(plugin[info_text].visible,true);
+			set(plugin[info_text].enabled,true);
+			tween(plugin[info_text].alpha,.85,0.3);
+			tween(plugin[info_text].textblur,0,0.3); 
+			tween(plugin[info_text].blur,0,0.3);
+		</action>
+	
+		<action name="hide_info_text">
+			tween(plugin[info_text].alpha,0,0.3,null,set(plugin[info_text].visible,false)); 
+			tween(plugin[info_text].textblur,20,0.3); 
+			tween(plugin[info_text].blur,20,0.3);
+		</action>
+	 <data name="info_html">
+			<p>
+			
+			<br/>
+				Click and drag to view the image.
+			<br/>
+			<br/>
+			<b>OK</b>
+			<br/>
+			</p>
+		</data>
+<!--小行星效果<action name="toggleplanet">
+if(islittleplanet == false, 
+set(islittleplanet,true); 
+set(display.flash10,off); 
+set(view.stereographic,true); 
+tween(view.hlookat, 140, 0.0); 
+tween(view.fisheye, 1.0, 0.0); 
+tween(view.vlookat, 30.0, 0.0); 
+tween(view.fov, 120.0, 0.0); , 
+set(islittleplanet, false); 
+tween(view.fisheye, 0.0, 1.5, easeInOutQuad, WAIT); 
+set(display.flash10,on); 
+tween(view.hlookat,140, 1.0,easeInOutQuad);
+ tween(view.vlookat, 10.0, 1.0,easeInOutQuad);
+ tween(view.fov, 120.0, 2.2,easeInOutQuad); );
+ </action-->
+
+	<scene name="scene__Group_0_-DSC02254_DSC02276-23_images" title="航拍案例" onstart="toggleplanet()" thumburl="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/thumb.jpg" >
+	
+	
+
+		<view hlookat="140" vlookat="90" fovtype="MFOV" fov="200" maxpixelzoom="2.0" fovmin="90" fovmax="150" stereographic="true" fisheye="2.0"/>
+        <lensflare name="lf0" set="DEFAULT" visible="true" ath="-120" atv="-20" size="0.80" blind="0.60" blindcurve="4.00"/>
+		<preview url="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/preview.jpg" />
+	<action name="toggleplanet">
+	
+			set(islittleplanet, false);
+			tween(view.fisheye, 0.0, 2.5, default, set(display.flash10,on));
+			tween(view.hlookat, 140, 2.5);
+			tween(view.vlookat, 30, 2.5);
+			tween(view.fov, 120.0, 2.5);
+		
+	    </action>
+        
+		<image type="CUBE" multires="true" tilesize="512" progressive="false">
+			<level tiledimagewidth="4775" tiledimageheight="4775">
+				<cube url="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2388" tiledimageheight="2388">
+				<cube url="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1194" tiledimageheight="1194">
+				<cube url="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="597" tiledimageheight="597">
+				<cube url="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+			<mobile>
+				<cube url="panos/_Group_0_-DSC02254_DSC02276-23_images.tiles/mobile_%s.jpg" />
+			</mobile>
+			
+		</image>
+	<hotspot name="spot1" style="hotspot_ani_white" 
+		         ath="340"
+		         atv="170"
+		         zoom="false"
+		         onclick="looktohotspot(get(name)); loadscene('scene__Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images',null,MERGE,BLEND(1));"
+				 onhover="showtext(篮球场,STYLE2);"
+		         />	
+
+
+     
+		<!-- place your scene hotspots here -->
+
+	</scene>
+<scene name="scene__Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images" title="篮球场" onstart="" thumburl="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="250" vlookat="-30" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512" progressive="false">
+			<level tiledimagewidth="3832" tiledimageheight="3832">
+				<cube url="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/%s/l4/%v/l4_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="1916" tiledimageheight="1916">
+				<cube url="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/%s/l3/%v/l3_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="958" tiledimageheight="958">
+				<cube url="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="512" tiledimageheight="512">
+				<cube url="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+			<mobile>
+				<cube url="panos/_Group_1_-DSC_0262_3_4_DSC_0280_1_2-7_images.tiles/mobile_%s.jpg" />
+			</mobile>
+		</image>
+		<hotspot name="spot1" style="hotspot_ani_white" 
+		         ath="200"
+		         atv="-20"
+		         zoom="false"
+		         onclick="looktohotspot(get(name)); loadscene('scene__Group_0_-DSC02254_DSC02276-23_images',view.hlookat=-276.8,MERGE,ZOOMBLEND(1.5,10));delayedcall(1,lookto(140,90,{zoom});"
+				 onhover="showtext(航拍俯瞰校园,STYLE2);"
+				 
+         /> 
+
+		       
+				 
+
+
+		<!-- place your scene hotspots here -->
+
+	</scene>
+	
+
+	<!-- right-click context menu to change the viewing settings -->	
+
+		<contextmenu enterfs="全屏播放" exitfs="退出全屏">
+			<item caption="雨花石"/>
+			<item caption="技术提供:雨花石" separator="true" onclick="openurl(http://www.yhskj.cn/guanyuwomen/);"/>
+			<item caption="雨花石" onclick="openurl(http://www.yhskj.cn);" />
+			
+		</contextmenu>
+</krpano>

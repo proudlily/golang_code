@@ -1,0 +1,16 @@
+package controllers
+
+import (
+	"github.com/revel/revel"
+)
+
+type App struct {
+	*revel.Controller
+}
+
+func (c App) Index() revel.Result {
+
+	//data :=[]bson.M{}
+	//models.TimeList("blog", nil, &data, nil)
+	return c.Render()
+}
